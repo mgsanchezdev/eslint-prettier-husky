@@ -1,70 +1,153 @@
-# Getting Started with Create React App
+# Configurar un proyecto de React con Eslint, Prettier y Husky
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Lo primero es instalar la extensiones de Eslint y Prettier en Visual Studio Code
 
-## Available Scripts
+Luego instalamos Eslint:
 
-In the project directory, you can run:
+npm install eslint --save-dev
 
-### `npm start`
+Luego vamos a iniciar la configuración con:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+npx eslint --init
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Nos pregunta:
 
-### `npm test`
+How would you like to use ESLint? ...
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Elegimos:
 
-### `npm run build`
+To check syntax, find problems, and enforce code style
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Nos pregunta:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+What type of modules does your project use? .
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Elegimos:
 
-### `npm run eject`
+JavaScript modules (import/export)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Nos pregunta:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Which framework does your project use? ...
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Elegimos:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+React
 
-## Learn More
+Nos pregunta:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Does your project use TypeScript?
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Elegimos:
 
-### Code Splitting
+No
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Nos pregunta:
 
-### Analyzing the Bundle Size
+Where does your code run?
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Elegimos:
 
-### Making a Progressive Web App
+Browser
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Nos pregunta:
 
-### Advanced Configuration
+How would you like to define a style for your project?
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Elegimos:
 
-### Deployment
+Use a popular style guide
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Nos pregunta:
 
-### `npm run build` fails to minify
+Which style guide do you want to follow?
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Elegimos:
+
+Airbnb: https://github.com/airbnb/javascript
+
+Nos pregunta:
+
+What format do you want your config file to be in?
+
+Elegimos:
+
+JavaScript
+
+Nos pregunta:
+
+Would you like to install them now with npm?
+
+Elgimos:
+
+Yes
+
+Luego en el archivo .eslintrc.js agregamos en rules las siguientes reglas:
+
+rules: {
+'import/prefer-default-export': 'off',
+'react/jsx-filename-extension': 'off',
+'react/prop-types': 'off',
+'linebreak-style': 'off',
+},
+
+Luego instalamos:
+
+npm install eslint-config-prettier -D
+
+Agremos en .eslintrc.js al final del extends a 'prittier'
+
+extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
+
+Esto es lo que hace es desactivar todas las reglas de Eslint que van a tener conflicto con Prettier.
+
+Ahora vamos a instalar Prettier:
+
+npm install prettier -D
+
+Luego creamos el archivo de configuracion de Prettier en la raíz del proyecto:
+
+.prettierrc.js
+
+y escribimos el el archivo la configuración:
+
+module.exports = {
+trailingComma: 'es5',
+singleQuote: true,
+printWidth: 80,
+tabWidth: 2,
+useTabs: false,
+endOfLine: 'lf',
+}
+
+Ahora para que todos lo integrantes del proyecto tengan la misma configuración el Visual Studio Code, hacemos lo siguiente:
+
+Creamos la carpeta en la raíz del proyecto:
+
+.vscode
+
+y dentro creamos dos archivos, uno llamado settings.json con la siguiente configuración:
+
+{
+"editor.formatOnSave": false,
+"editor.codeActionsOnSave": {
+"source.fixAll.eslint": true
+}
+}
+
+Y luego el otro archivo llamado extensions.json con la configuración:
+
+{
+"recommendations": [
+"dbaeumer.vscode-eslint",
+"esbenp.prettier-vscode"
+]
+}
+
+Luego para prevenir subir código con errores a GitHub instalamos Husky, esto al momento de hacer un commit va a analizar el código con Eslint y con Prettier, en caso que encuentre algun error no nos va a dejar hacer el commit o push:
+
+npm install husky --save-dev
+
+y luego instalar:
+
+npx mrm lint-staged
