@@ -153,3 +153,15 @@ npm install husky --save-dev
 y luego instalar:
 
 npx mrm lint-staged
+
+Para descargar el proyecto:
+
+git clone git@github.com:mgsanchezdev/eslint-prettier-husky.git
+
+cd eslint-prettier-husky.git
+
+npm install
+
+y se abre en el navegador:
+
+http://localhost:3000
